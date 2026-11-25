@@ -6,7 +6,8 @@ export function runLoader(onOpen: () => void) {
   const root = document.getElementById("loader");
   if (!root) { onOpen(); return; }
   const cover = root.querySelector<HTMLElement>(".ld-cover")!;
-  const ring = root.querySelector<HTMLElement>(".ld-ring")!;
+  const ring = root.querySelector<SVGCircleElement>(".ld-ring")!;
+  const glow = root.querySelector<SVGCircleElement>(".ld-glow")!;
   const photon = root.querySelector<HTMLElement>(".ld-photon")!;
   document.documentElement.style.overflow = "hidden";
   let opened = false;
@@ -17,8 +18,8 @@ export function runLoader(onOpen: () => void) {
   const s = { r: 0, a: -Math.PI / 2 };
   const apply = () => {
     cover.style.setProperty("--r", `${s.r}px`);
-    ring.style.width = ring.style.height = `${s.r * 2}px`;
-    photon.style.transform = `translate(${Math.cos(s.a) * s.r}px, ${Math.sin(s.a) * s.r}px) translate(-50%, -50%)`;
+    const r = s.r.toFixed(1); ring.setAttribute("r", r); glow.setAttribute("r", r);
+    photon.style.transform = `translate3d(${(Math.cos(s.a) * s.r - 8).toFixed(1)}px, ${(Math.sin(s.a) * s.r - 8).toFixed(1)}px, 0)`;
   };
   apply();
   const tl = gsap.timeline({ onComplete: finish, onUpdate: apply });

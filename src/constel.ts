@@ -16,10 +16,15 @@ export function initConstel(reduced: boolean) {
   let len = 0;
   let spun = items.map(() => false);
 
+  let key = "";
   const build = () => {
     const R = root.getBoundingClientRect();
-    svg.setAttribute("viewBox", `0 0 ${R.width} ${R.height}`);
     const pts = nodes.map((n) => { const r = n.getBoundingClientRect(); return [r.left - R.left + r.width / 2, r.top - R.top + r.height / 2]; });
+    /* só refaz a linha quando o desenho mudou de verdade (refresh do scroll chama isto várias vezes) */
+    const k = `${R.width | 0}x${R.height | 0}:${pts.map((p) => p.map(Math.round).join(",")).join(";")}`;
+    if (k === key) return;
+    key = k;
+    svg.setAttribute("viewBox", `0 0 ${R.width} ${R.height}`);
     let d = `M${pts[0][0]} ${pts[0][1]}`;
     for (let i = 1; i < pts.length; i++) {
       const [x0, y0] = pts[i - 1], [x1, y1] = pts[i], ym = (y0 + y1) / 2;
@@ -28,7 +33,7 @@ export function initConstel(reduced: boolean) {
     base.setAttribute("d", d); prog.setAttribute("d", d);
     len = prog.getTotalLength();
     prog.style.strokeDasharray = String(len);
-    const N = 600, samples: [number, number][] = [];
+    const N = 180, samples: [number, number][] = [];
     for (let k = 0; k <= N; k++) { const p = prog.getPointAtLength((k / N) * len); samples.push([p.x, p.y]); }
     fr = pts.map(([x, y]) => { let best = 0, bd = Infinity; samples.forEach(([sx, sy], k) => { const dd = (sx - x) ** 2 + (sy - y) ** 2; if (dd < bd) { bd = dd; best = k; } }); return best / N; });
   };
@@ -50,10 +55,10 @@ export function initConstel(reduced: boolean) {
     items.forEach((_, i) => light(i, p > 0 && p >= fr[i] - 0.02));
   };
 
-  build();
-  if (reduced) { update(1); items.forEach((_, i) => light(i, true)); return; }
-  update(0);
-  ScrollTrigger.create({ trigger: root, start: "top 55%", end: "bottom 60%", onUpdate: (s) => update(s.progress), onRefresh: (s) => { build(); update(s.progress); } });
+  if (reduced) { build(); update(1); items.forEach((_, i) => light(i, true)); return; }
+  /* o ScrollTrigger chama onRefresh ao nascer, então a primeira montagem acontece lá */
+  const st = ScrollTrigger.create({ trigger: root, start: "top 55%", end: "bottom 60%", onUpdate: (s) => update(s.progress), onRefresh: (s) => { build(); update(s.progress); } });
+  if (!key) { build(); update(st.progress); }
   nodes.forEach((n, i) => {
     n.addEventListener("pointerenter", () => { if (items[i].classList.contains("is-on")) gsap.to(items[i].querySelector(".cn-rot"), { rotation: "+=" + spin, svgOrigin: "0 0", duration: 0.9, ease: "power3.out" }); });
     n.addEventListener("click", () => gsap.to(items[i].querySelector(".cn-rot"), { rotation: "+=" + spin, svgOrigin: "0 0", duration: 0.9, ease: "power3.out" }));

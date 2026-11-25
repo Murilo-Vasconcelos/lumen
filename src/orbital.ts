@@ -1,11 +1,11 @@
 import * as THREE from "three";
 
-export interface Orbital { reveal(): void; pointer(x: number, y: number): void; arc(p: number): void }
+export interface Orbital { reveal(): void; start(): void; pointer(x: number, y: number): void; arc(p: number): void }
 
 /* Cena do hero: o anel excêntrico da marca (a cavidade, "lúmen") feito de partículas rosa,
    com o fóton âmbar assentado na borda mais fina e raios de luz saindo dele. */
 export function initOrbital(canvas: HTMLCanvasElement, reduced: boolean): Orbital {
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true, powerPreference: "high-performance" });
   renderer.setClearColor(0x000000, 0);
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 50);
@@ -20,8 +20,11 @@ export function initOrbital(canvas: HTMLCanvasElement, reduced: boolean): Orbita
   const push = (x: number, y: number, z: number, c: THREE.Color, s: number) => { P.push(x, y, z); C.push(c.r, c.g, c.b); S.push(s); };
 
   /* anel: raio maior 1,55; espessura do tubo varia com o ângulo (fina no alto à direita, grossa embaixo à esquerda) */
+  /* aparelhos modestos (poucos núcleos ou tela pequena) recebem menos partículas */
+  const lite = (navigator.hardwareConcurrency || 4) <= 4 || Math.min(innerWidth, innerHeight) < 700;
+  const q = lite ? 0.6 : 1;
   const R = 1.55, TH = Math.PI / 4;
-  for (let i = 0; i < 11000; i++) {
+  for (let i = 0; i < 11000 * q; i++) {
     const th = Math.random() * Math.PI * 2;
     const k = (1 + Math.cos(th - TH + Math.PI)) / 2;        /* 0 na borda fina, 1 na grossa */
     const tube = 0.09 + 0.5 * k;
@@ -31,16 +34,16 @@ export function initOrbital(canvas: HTMLCanvasElement, reduced: boolean): Orbita
   }
   /* fóton: núcleo denso âmbar na borda fina */
   const px = (R + 0.05) * Math.cos(TH), py = (R + 0.05) * Math.sin(TH);
-  for (let i = 0; i < 1400; i++) push(px + gauss() * 0.11, py + gauss() * 0.11, gauss() * 0.11, amber, 1.3 + Math.random() * 2);
+  for (let i = 0; i < 1400 * q; i++) push(px + gauss() * 0.11, py + gauss() * 0.11, gauss() * 0.11, amber, 1.3 + Math.random() * 2);
   /* raios: partículas âmbar que se afastam do fóton, ficando mais raras */
-  for (let i = 0; i < 1800; i++) {
+  for (let i = 0; i < 1800 * q; i++) {
     const t = Math.pow(Math.random(), 1.6) * 3.2 + 0.25;
     const spread = (Math.random() < 0.7 ? 0.28 : 1.2) * gauss() * 0.5;
     const ang = TH + spread;
     push(px + Math.cos(ang) * t, py + Math.sin(ang) * t, gauss() * 0.15, amber, 0.9 + Math.random() * 1.1);
   }
   /* poeira lilás ao redor */
-  for (let i = 0; i < 700; i++) push(gauss() * 3.4, gauss() * 3.0, gauss() * 1.4, lilac, 0.7 + Math.random() * 0.8);
+  for (let i = 0; i < 700 * q; i++) push(gauss() * 3.4, gauss() * 3.0, gauss() * 1.4, lilac, 0.7 + Math.random() * 0.8);
 
   const geo = new THREE.BufferGeometry();
   geo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(P), 3));
@@ -62,11 +65,12 @@ export function initOrbital(canvas: HTMLCanvasElement, reduced: boolean): Orbita
   group.add(new THREE.Points(geo, mat));
   scene.add(group);
 
-  let w = 1, h = 1, visible = true, mx = 0, my = 0, tx = 0, ty = 0, baseK = 1, intro = 1, arcP = 0;
+  let maxDpr = Math.min(window.devicePixelRatio || 1, 1.5);
+  let w = 1, h = 1, visible = true, running = false, mx = 0, my = 0, tx = 0, ty = 0, baseK = 1, intro = 1, arcP = 0;
   function resize() {
     const r = canvas.getBoundingClientRect();
     w = Math.max(1, r.width); h = Math.max(1, r.height);
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
     renderer.setPixelRatio(dpr); renderer.setSize(w, h, false);
     camera.aspect = w / h;
     const wide = w / h > 1.05;
@@ -80,9 +84,18 @@ export function initOrbital(canvas: HTMLCanvasElement, reduced: boolean): Orbita
 
   setTimeout(() => { if (intro < 1) intro = 1; }, 6000);
   const t0 = performance.now();
-  function frame() {
+  /* qualidade adaptativa: se os quadros demorarem, a resolução cai um degrau (e não volta) */
+  let last = 0, slow = 0;
+  function adapt(now: number) {
+    const dt = now - last; last = now;
+    if (dt > 120) return;
+    slow = dt > 26 ? slow + 1 : Math.max(0, slow - 1);
+    if (slow > 24 && maxDpr > 0.75) { maxDpr = Math.max(0.75, maxDpr - 0.25); slow = 0; resize(); }
+  }
+  function frame(now = performance.now()) {
     requestAnimationFrame(frame);
-    if (!visible) return;
+    if (!running || !visible) { last = now; return; }
+    adapt(now);
     const t = (performance.now() - t0) / 1000;
     mx += (tx - mx) * 0.05; my += (ty - my) * 0.05;
     const sc = window.scrollY / Math.max(1, h);
@@ -95,10 +108,11 @@ export function initOrbital(canvas: HTMLCanvasElement, reduced: boolean): Orbita
     camera.position.x = arcP * 2.4; camera.lookAt(0, 0, 0);
     renderer.render(scene, camera);
   }
-  frame();
+  requestAnimationFrame(frame);
 
   return {
     reveal() {},
+    start() { running = true; },
     arc(p) { arcP = p; },
     pointer(x, y) { tx = x - 0.5; ty = y - 0.5; },
   };
