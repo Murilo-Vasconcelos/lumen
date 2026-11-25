@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lumen</title>
+<meta name="description" content="Lumen: triagem de fotossensibilizadores para terapia fotodinâmica. Indica em quais moléculas a previsão clássica não é confiável e usa o computador quântico só nesse ponto." />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii01OCAtNTggMTE2IDExNiIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiPjxyZWN0IHg9Ii01OCIgeT0iLTU4IiB3aWR0aD0iMTE2IiBoZWlnaHQ9IjExNiIgcng9IjI0LjQiIGZpbGw9IiMxNzBBMjYiLz48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGZpbGw9IiNGRjNEN0YiIGQ9Ik00NCAwQTQ0IDQ0IDAgMSAwIC00NCAwQTQ0IDQ0IDAgMSAwIDQ0IDBaIE0zNSAtOEEyNyAyNyAwIDEgMCAtMTkgLThBMjcgMjcgMCAxIDAgMzUgLThaIi8+PGNpcmNsZSBjeD0iMjcuMDkiIGN5PSItMjcuMDkiIHI9IjkiIGZpbGw9IiNGRkM4M0QiLz48L3N2Zz4=" />
+<script>document.documentElement.classList.add("js")</script>
+</head>
+<body>
+
+<div id="loader" aria-hidden="true">
+  <div class="ld-cover"></div>
+  <div class="ld-ring"></div>
+  <div class="ld-photon"></div>
+</div>
+
+<div id="cursor" aria-hidden="true"><div class="cur-in"><svg viewBox="-51 -51 102 102"><path class="k-ring" fill-rule="evenodd" d="M44 0A44 44 0 1 0 -44 0A44 44 0 1 0 44 0Z M35 -8A27 27 0 1 0 -19 -8A27 27 0 1 0 35 -8Z"/><circle class="k-dot" cx="27.09" cy="-27.09" r="9"/></svg></div></div>
+
+<header id="nav" class="fixed inset-x-0 top-0 z-50 mix-blend-difference">
+  <div class="wrap flex h-16 items-center justify-between text-paper">
+    <a href="#topo" class="h-7" aria-label="Lumen, início"><svg viewBox="0 0 337.2 100" role="img" aria-label="Lumen" class="h-full w-auto"><g transform="translate(50 50)"><path fill-rule="evenodd" fill="#FF3D7F" d="M44 0A44 44 0 1 0 -44 0A44 44 0 1 0 44 0Z M35 -8A27 27 0 1 0 -19 -8A27 27 0 1 0 35 -8Z"/><circle cx="27.09" cy="-27.09" r="9" fill="#FFC83D"/></g><path d="M138.82846358823775 28.983725803911682 137.0514568744898 29.52115019443631Q136.0511785104871 29.94855545046925 135.62126042836906 30.600977148935193Q135.19134234625102 31.253398847401137 135.19134234625102 32.43241560158133V67.84659997546672Q135.19134234625102 69.53891663461923 135.9724617637545 70.29352069304883Q136.75358118125797 71.04812475147843 138.2759095940888 71.04812475147843H145.06337357398868Q146.75592589432 71.04812475147843 147.94636964832245 70.54871811780333Q149.13681340232492 70.04931148412822 150.03556320400537 68.86550351813435Q150.9343130056858 67.68169555214047 151.72729823955893 65.66209061524272L153.29788901630045 61.61786578789353Q153.88254365321995 60.19475622108578 154.77549958583714 59.733527365416286Q155.66845551845432 59.27229850974679 156.7813986816406 59.507284349590535Q157.9707516566515 59.776951755940914 158.47364881022276 60.7659615586251Q158.976545963794 61.75497136130929 158.579802141428 63.266747532308095L155.8136459481418 74.08569942370056Q155.30586980330943 76.06955323141813 154.48748810252545 76.98212378805874Q153.6691064017415 77.89469434469937 152.15133902418614 77.89469434469937Q151.1258705139458 77.89469434469937 150.254869596228 77.57102075852453Q149.3838686785102 77.24734717234969 148.40339688764513 76.92367358617484Q147.42292509678006 76.6 146.07323910957575 76.6H121.26554964780807Q119.80957277143001 76.6 119.03610956254602 75.90107310922443Q118.26264635366202 75.20214621844887 118.26264635366202 73.92061445400118Q118.26264635366202 71.89009346228838 120.23251349321008 71.0162741960883L122.02232347756625 70.47884980556368Q123.03696656149626 70.05056605744362 123.45970228365064 69.39218196971714Q123.88243800580501 68.73379788199067 123.88243800580501 67.56758439841866V32.43241560158133Q123.88243800580501 31.253398847401137 123.45970228365064 30.600977148935193Q123.03696656149626 29.94855545046925 122.02232347756625 29.52115019443631L120.23251349321008 28.983725803911682Q118.26264635366202 28.109906537711616 118.26264635366202 26.079385545998804Q118.26264635366202 24.78505051094293 119.03610956254602 24.092525255471465Q119.80957277143001 23.4 121.26554964780807 23.4H137.82103397485614Q139.31344940191508 23.4 140.06869333545865 24.092525255471465Q140.8239372690022 24.78505051094293 140.8239372690022 26.079385545998804Q140.8239372690022 28.08429999649524 138.82846358823775 28.983725803911682ZM183.83914338454605 71.73437842234969V69.70992339217662L183.55758973032235 69.47854411971568V52.907234776139255Q183.55758973032235 51.63389579126238 183.25168591083587 51.11185029390454Q182.94578209134937 50.58980479654669 182.24349359124898 50.32386563551425L180.84596595102548 50.174833313047884Q180.04742144331334 49.78886441481113 179.7073048312962 49.315242100358006Q179.36718821927906 48.84161978590488 179.36718821927906 48.11776841959357Q179.36718821927906 47.2966441040635 179.86800795848666 46.700552110999816Q180.3688276976943 46.10446011793613 181.6309801635146 45.615127694308754L187.34841730594633 43.43924000337719Q188.8706934725642 42.848906385213134 189.73153685854373 42.6328606916666Q190.59238024452327 42.41681499812007 191.3294061626196 42.41681499812007Q192.43860430890322 42.41681499812007 193.01797112800182 43.11045407107472Q193.59733794710039 43.80409314402937 193.59733794710039 44.94221626502275V68.66452661132811Q193.59733794710039 70.16287739345431 193.90786866086722 70.78321189008653Q194.21839937463403 71.40354638671874 194.85843047639727 71.68113896396756L195.83035659331082 72.01277563476562Q196.54166106283662 72.45374472919106 196.91025314091144 72.99602795410155Q197.27884521898625 73.53831117901206 197.27884521898625 74.37087285068631Q197.27884521898625 75.42298161533475 196.6370928146392 76.01149080766737Q195.99534041029216 76.6 194.85489527219534 76.6H188.72962770721315Q186.3427409491539 76.6 185.09094216684997 75.2724560830444Q183.83914338454605 73.94491216608881 183.83914338454605 71.73437842234969ZM162.42761754506824 66.8371057652235V52.907234776139255Q162.42761754506824 51.63389579126238 162.12171372558174 51.11185029390454Q161.81580990609527 50.58980479654669 161.11352140599487 50.32386563551425L159.71599376577137 50.174833313047884Q158.91744925805926 49.78886441481113 158.57733264604212 49.315242100358006Q158.23721603402495 48.84161978590488 158.23721603402495 48.11776841959357Q158.23721603402495 47.2966441040635 158.73803577323258 46.700552110999816Q159.2388555124402 46.10446011793613 160.5010079782605 45.615127694308754L166.21844512069225 43.43924000337719Q167.74072128731012 42.848906385213134 168.60156467328966 42.6328606916666Q169.4624080592692 42.41681499812007 170.1994339773655 42.41681499812007Q171.30863212364912 42.41681499812007 171.8879989427477 43.11045407107472Q172.4673657618463 43.80409314402937 172.4673657618463 44.94221626502275V64.28356738719344Q172.4673657618463 67.13922014510631 173.713918193236 68.63098517283797Q174.96047062462569 70.12275020056963 177.0179867161214 70.12275020056963Q178.50741144669055 70.12275020056963 180.08457897511124 69.3812762582004Q181.66174650353193 68.63980231583118 183.35077953225374 67.03732993426918L184.56221845790742 65.88264818897844L186.60675697979332 68.43837690517306L185.0797254768908 69.99967837965488Q181.15757067871093 74.05815606257319 177.864578580603 75.78535117669404Q174.57158648249506 77.51254629081487 171.48802364245057 77.51254629081487Q167.37843868151307 77.51254629081487 164.90302811329065 74.68950919452308Q162.42761754506824 71.86647209823131 162.42761754506824 66.8371057652235ZM211.9951169695258 44.94221626502275V68.66452661132811Q211.9951169695258 70.25331972393393 212.24918469676373 70.92086581856012Q212.5032524240017 71.5884119131863 213.2075730242133 71.92432133701443L214.22813561573622 72.30459448242186Q215.40756218174099 73.06650293406844 215.40756218174099 74.37087285068631Q215.40756218174099 76.6 213.20403782001137 76.6H200.70230024075508Q199.56429504406452 76.6 198.92132266901433 76.01193005371093Q198.27835029396414 75.42386010742187 198.27835029396414 74.37087285068631Q198.27835029396414 73.53831117901206 198.64738161808253 72.99602795410155Q199.0164129422009 72.45374472919106 199.7268389196396 72.01277563476562L200.7005220207274 71.68113896396756Q201.3805243836343 71.39074311611056 201.6710694668293 70.78321189008653Q201.96161455002425 70.1756806640625 201.96161455002425 68.66452661132811V52.907234776139255Q201.96161455002425 51.63389579126238 201.65571073053775 51.11185029390454Q201.34980691105127 50.58980479654669 200.64751841095088 50.32386563551425L199.24999077072738 50.174833313047884Q198.45144626301527 49.78886441481113 198.11132965099813 49.315242100358006Q197.77121303898096 48.84161978590488 197.77121303898096 48.11776841959357Q197.77121303898096 47.2966441040635 198.2720327781886 46.700552110999816Q198.77285251739622 46.10446011793613 200.0350049832165 45.615127694308754L205.74619632837175 43.43924000337719Q207.26847249498962 42.848906385213134 208.12931588096916 42.6328606916666Q208.9901592669487 42.41681499812007 209.727185185045 42.41681499812007Q210.83638333132862 42.41681499812007 211.41575015042721 43.11045407107472Q211.9951169695258 43.80409314402937 211.9951169695258 44.94221626502275ZM210.99048824194074 53.867971692830324 208.94594972005484 51.44878370454907 210.47298122295737 49.88748223006725Q214.46828626790642 45.73309751239418 217.7994149387181 43.98558555169403Q221.13054360952972 42.23807359099388 224.19222815367579 42.23807359099388Q228.37740330278874 42.23807359099388 230.8787913250625 45.04895156863331Q233.38017934733628 47.85982954627275 233.38017934733628 52.91351411658525V68.66452661132811Q233.38017934733628 70.25331972393393 233.6342470745742 70.92008509390055Q233.88831480181216 71.58685046386718 234.59263540202377 71.92432133701443L235.61319799354672 72.30459448242186Q236.79262455955148 73.06650293406844 236.79262455955148 74.37087285068631Q236.79262455955148 76.6 234.58910019782184 76.6H222.13599909317492Q219.9324747314453 76.6 219.9324747314453 74.37087285068631Q219.9324747314453 73.06650293406844 221.11190129745006 72.30459448242186L222.13422087314723 71.92432133701443Q222.83854147335887 71.5884119131863 223.09260920059683 70.92086581856012Q223.34667692783475 70.25331972393393 223.34667692783475 68.66452661132811V55.46705249461532Q223.34667692783475 52.61139973670244 222.08396398706734 51.11963470897078Q220.82125104629992 49.62786968123912 218.66538797864317 49.62786968123912Q217.16356978929042 49.62786968123912 215.52970493420958 50.369685102224345Q213.89584007912873 51.11150052320957 212.20192716759442 52.71641284617781ZM232.3442072752714 53.60048588353395 230.3224255413711 51.20405468323826 231.86518589556215 49.64890265336632Q235.77352048152684 45.64975875863432 238.7851924611926 43.9439161748141Q241.79686444085837 42.23807359099388 244.69343311423063 42.23807359099388Q248.77893285694716 42.23807359099388 250.80744834673402 44.71516998066008Q252.8359638365209 47.19226637032628 253.3670282590985 51.59880735966563L255.47590730482338 68.66452661132811Q255.65290849936008 70.15292387607693 255.86711210393904 70.76045510210096Q256.081315708518 71.367986328125 256.73699983412024 71.68113896396756L257.70892595103385 72.01277563476562Q258.39659514048697 72.47962441581487 258.7883832525909 73.00896779741346Q259.18017136469484 73.53831117901206 259.18017136469484 74.37087285068631Q259.18017136469484 75.42386010742187 258.53841896034777 76.01193005371093Q257.8966665560007 76.6 256.7562214179039 76.6H244.17772327086328Q241.97419890913366 76.6 241.97419890913366 74.37087285068631Q241.97419890913366 73.089259722054 243.17638226312397 72.30459448242186L244.19782334673403 71.92432133701443Q244.90214394694567 71.5884119131863 245.24471227145193 70.96637939453124Q245.58728059595822 70.34434687587618 245.41027940142155 68.89209449118376L243.59321920335293 55.47223944085836Q243.19372000989318 52.571951599061485 242.14089723858237 51.0999106401503Q241.08807446727155 49.62786968123912 238.9845386353135 49.62786968123912Q237.79478050017354 49.62786968123912 236.49029731094834 50.29091295954584Q235.18581412172315 50.953956237852566 233.57137505221365 52.45507648149132ZM291.0123721270263 55.03933608573675Q291.0123721270263 57.60872979304194 289.6543291234076 58.97623710855841Q288.2962861197889 60.343744424074885 285.77501915639635 60.343744424074885H266.04991091045736V56.50476425606011H278.5822324481606Q280.73958757248516 56.50476425606011 280.73958757248516 54.340698220402Q280.73958757248516 51.05551372420787 279.20031299929315 49.2377099173665Q277.6610384261012 47.419906110525126 275.2839786813855 47.419906110525126Q273.3459037519991 47.419906110525126 271.82089514604206 48.537527374297376Q270.29588654008506 49.655148638069626 269.4163175463825 51.80261883983016Q268.53674855267997 53.95008904159069 268.53674855267997 57.08393972343206Q268.53674855267997 63.4604943062663 271.43663336625696 66.73251300480962Q274.3365181798339 70.00453170335292 279.05245284605024 70.00453170335292Q281.9242123195827 70.00453170335292 284.173956401363 68.72360777932406Q286.4237004831433 67.44268385529517 287.7269776307046 65.55985050743817Q288.35946786069866 64.89181699043512 288.830210987702 64.63130132837594Q289.3009541147053 64.37078566631675 289.74422845464943 64.37390856495499Q290.3105778198838 64.37547001427411 290.6753920615464 64.8322203194499Q291.04020630320906 65.28897062462568 291.01459976199266 66.23514122658968Q290.86937132486696 69.10826732522249 289.03840385879573 71.65181641057133Q287.2074363927245 74.19536549592017 283.9501630533189 75.78436779128015Q280.6928897139132 77.37337008664011 276.27371015286445 77.37337008664011Q271.1231974096 77.37337008664011 267.3233540519774 75.20929138834774Q263.52351069435474 73.04521269005537 261.4475734515786 69.14785945563017Q259.37163620880244 65.25050622120499 259.37163620880244 60.107682612806556Q259.37163620880244 55.00188237655162 261.38595921993254 50.95576907351612Q263.40028223106265 46.909655770480626 267.2805653339028 44.57474317282438Q271.160848436743 42.23983057516813 276.6804262347221 42.23983057516813Q281.0441957877576 42.23983057516813 284.2603176858574 43.928000361889595Q287.4764395839572 45.61617014861106 289.2444058554918 48.52176570349931Q291.0123721270263 51.42736125838756 291.0123721270263 55.03933608573675ZM306.50736276680226 44.94221626502275V68.66452661132811Q306.50736276680226 70.25331972393393 306.7614304940402 70.92086581856012Q307.01549822127816 71.5884119131863 307.71981882148975 71.92432133701443L308.7403814130127 72.30459448242186Q309.91980797901743 73.06650293406844 309.91980797901743 74.37087285068631Q309.91980797901743 76.6 307.71628361728784 76.6H295.208300240755Q294.0702950440645 76.6 293.4273226690143 76.01193005371093Q292.7843502939641 75.42386010742187 292.7843502939641 74.37087285068631Q292.7843502939641 73.53831117901206 293.15338161808245 72.99602795410155Q293.52241294220084 72.45374472919106 294.23283891963956 72.01277563476562L295.20652202072733 71.68113896396756Q295.8865243836343 71.39074311611056 296.17706946682927 70.78321189008653Q296.4676145500242 70.1756806640625 296.4676145500242 68.66452661132811V52.907234776139255Q296.4676145500242 51.63389579126238 296.1617107305377 51.11185029390454Q295.8558069110512 50.58980479654669 295.1535184109509 50.32386563551425L293.75599077072735 50.174833313047884Q292.95744626301524 49.78886441481113 292.61732965099804 49.315242100358006Q292.2772130389809 48.84161978590488 292.2772130389809 48.11776841959357Q292.2772130389809 47.2966441040635 292.7780327781885 46.700552110999816Q293.27885251739616 46.10446011793613 294.5410049832165 45.615127694308754L300.25844212564823 43.43924000337719Q301.7807182922661 42.848906385213134 302.64156167824564 42.6328606916666Q303.5024050642252 42.41681499812007 304.23943098232144 42.41681499812007Q305.34862912860507 42.41681499812007 305.92799594770366 43.11045407107472Q306.50736276680226 43.80409314402937 306.50736276680226 44.94221626502275ZM305.4713906947374 53.72851858961582 303.4496089608371 51.33208738932013 304.99236931502816 49.77693535944819Q308.9649933994412 45.736258754253384 312.07231890211995 43.98716617262363Q315.1796444047987 42.23807359099388 318.20608037897944 42.23807359099388Q322.2268217555582 42.23807359099388 324.22594438821073 44.649728751003735Q326.22506702086326 47.0613839110136 326.71174897974726 51.271580592453475L328.855641793251 68.66452661132811Q329.0310815384686 70.15292387607693 329.2460658677071 70.76045510210096Q329.4610501969456 71.367986328125 330.11673432254787 71.68113896396756L331.0886604394614 72.01277563476562Q331.77632962891454 72.47962441581487 332.1681177410185 73.00896779741346Q332.5599058531224 73.53831117901206 332.5599058531224 74.37087285068631Q332.5599058531224 75.42386010742187 331.91815344877534 76.01193005371093Q331.2764010444283 76.6 330.1359559063315 76.6H317.5512119620144Q315.34768760028476 76.6 315.34768760028476 74.37087285068631Q315.34768760028476 73.02098935809731 316.5498709542751 72.30459448242186L317.57131203788515 71.92432133701443Q318.2756326380968 71.5884119131863 318.6174202379435 70.96637939453124Q318.9592078377902 70.34434687587618 318.78376809257264 68.89209449118376L316.9217406093478 54.985715157747265Q316.57345449832076 52.31873594012856 315.55314748278255 50.97330281068384Q314.53284046724434 49.62786968123912 312.494063001424 49.62786968123912Q311.1375892029702 49.62786968123912 309.72244361884884 50.317807804673905Q308.3072980347275 51.00774592810869 306.6729519304633 52.583109187573186Z" fill="currentColor"/></svg></a>
+    <nav class="hidden items-center gap-8 text-sm md:flex" aria-label="Seções">
+      <a href="#problema" class="opacity-80 hover:opacity-100">Problema</a>
+      <a href="#produto" class="opacity-80 hover:opacity-100">Produto</a>
+      <a href="#simulador" class="opacity-80 hover:opacity-100">Demo</a>
+      <a href="#demo" class="opacity-80 hover:opacity-100">Código</a>
+      <a href="#negocio" class="opacity-80 hover:opacity-100">Negócio</a>
+      <a href="#equipe" class="opacity-80 hover:opacity-100">Equipe</a>
+    </nav>
+    <a href="#simulador" class="eyebrow border border-paper/40 px-4 py-2 hover:border-paper">Ver o demo</a>
+  </div>
+</header>
+
+<main id="topo">
+
+<!-- HERO -->
+<section id="hero" class="section-dark relative isolate overflow-hidden">
+  <canvas id="orbital" class="absolute inset-0 -z-10 h-full w-full opacity-60 md:opacity-100" aria-hidden="true"></canvas>
+  <div class="absolute inset-0 -z-10 bg-[radial-gradient(60%_60%_at_72%_45%,transparent,#170a26_95%)]"></div>
+  <div class="wrap grid min-h-[100svh] content-end gap-10 pb-16 pt-32 md:pb-24">
+    <div class="max-w-5xl">
+      <p class="eyebrow mb-6 text-rose" data-hero="glyph">Triagem de fotossensibilizadores para terapia fotodinâmica</p>
+      <h1 class="display text-[clamp(2.7rem,8.6vw,8rem)]" aria-label="Onde o clássico duvida, entra o quântico.">
+        <span class="block overflow-hidden pb-[0.08em]"><span class="block" data-hero="line">Onde o clássico</span></span>
+        <span class="block overflow-hidden pb-[0.08em]"><span class="block" data-hero="line"><span class="serif text-amber">duvida,</span> entra</span></span>
+        <span class="block overflow-hidden pb-[0.08em]"><span class="block" data-hero="line">o quântico.</span></span>
+      </h1>
+    </div>
+    <div class="grid items-end gap-8 md:grid-cols-[1.1fr_1fr]">
+      <p class="max-w-xl overflow-hidden text-lg leading-relaxed text-paper/75"><span class="block" data-hero="body">
+        A Lumen aponta, entre centenas de moléculas, em quais a previsão clássica não é confiável, e usa o computador quântico só nesse ponto.
+      </span></p>
+      <div class="flex flex-wrap gap-3 md:justify-end" data-hero="card">
+        <a href="#simulador" class="btn btn-primary" data-magnet>Ver singleto e tripleto <span aria-hidden="true">→</span></a>
+        <a href="#produto" class="btn btn-ghost" data-magnet>Como funciona</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TERMOS (interativo) -->
+<section id="termos" class="section-dark border-y border-line py-20 md:py-32">
+  <div class="wrap">
+    <div class="mb-10 flex flex-wrap items-baseline justify-between gap-2"><p class="eyebrow text-rose">Quatro termos para ler o resto</p><p class="mono text-xs text-mute">role para ligar os termos</p></div>
+    <div id="constel" class="constel" data-rot="360">
+      <svg class="cn-line" aria-hidden="true"><path class="cn-base"/><path class="cn-prog"/><circle class="cn-spark" r="5.5"/></svg>
+      <div class="cn-item">
+        <div class="cn-node" role="img" aria-label="Termo 01"><svg viewBox="-54 -54 108 108" class="cn-mark" aria-hidden="true"><circle r="44" style="fill:var(--color-ink)"/><path class="ring" fill-rule="evenodd" d="M44 0A44 44 0 1 0 -44 0A44 44 0 1 0 44 0Z M35 -8A27 27 0 1 0 -19 -8A27 27 0 1 0 35 -8Z"/><g class="cn-rot"><circle class="ph" cx="27.09" cy="-27.09" r="9"/></g></svg><span class="cn-num">01</span></div>
+        <div class="cn-text"><h3 class="display">Fotossensibilizador</h3><p>A molécula que absorve a luz vermelha e repassa a energia ao oxigênio do tecido, destruindo só as células ao redor. Sem luz ou sem ela, nada acontece.</p></div>
+      </div>
+      <div class="cn-item">
+        <div class="cn-node" role="img" aria-label="Termo 02"><svg viewBox="-54 -54 108 108" class="cn-mark" aria-hidden="true"><circle r="44" style="fill:var(--color-ink)"/><path class="ring" fill-rule="evenodd" d="M44 0A44 44 0 1 0 -44 0A44 44 0 1 0 44 0Z M35 -8A27 27 0 1 0 -19 -8A27 27 0 1 0 35 -8Z"/><g class="cn-rot"><circle class="ph" cx="27.09" cy="-27.09" r="9"/></g></svg><span class="cn-num">02</span></div>
+        <div class="cn-text"><h3 class="display">Singleto e tripleto</h3><p>Ao absorver luz, a molécula vai ao singleto, que dura pouco. Para funcionar, precisa passar ao tripleto, que dura mais e ativa o oxigênio.</p></div>
+      </div>
+      <div class="cn-item">
+        <div class="cn-node" role="img" aria-label="Termo 03"><svg viewBox="-54 -54 108 108" class="cn-mark" aria-hidden="true"><circle r="44" style="fill:var(--color-ink)"/><path class="ring" fill-rule="evenodd" d="M44 0A44 44 0 1 0 -44 0A44 44 0 1 0 44 0Z M35 -8A27 27 0 1 0 -19 -8A27 27 0 1 0 35 -8Z"/><g class="cn-rot"><circle class="ph" cx="27.09" cy="-27.09" r="9"/></g></svg><span class="cn-num">03</span></div>
+        <div class="cn-text"><h3 class="display">Cruzamento intersistemas</h3><p>A passagem do singleto ao tripleto. As regras de spin a proíbem, e ela só acontece pelo acoplamento spin-órbita, forte em átomos pesados.</p></div>
+      </div>
+      <div class="cn-item">
+        <div class="cn-node" role="img" aria-label="Termo 04"><svg viewBox="-54 -54 108 108" class="cn-mark" aria-hidden="true"><circle r="44" style="fill:var(--color-ink)"/><path class="ring" fill-rule="evenodd" d="M44 0A44 44 0 1 0 -44 0A44 44 0 1 0 44 0Z M35 -8A27 27 0 1 0 -19 -8A27 27 0 1 0 35 -8Z"/><g class="cn-rot"><circle class="ph" cx="27.09" cy="-27.09" r="9"/></g></svg><span class="cn-num">04</span></div>
+        <div class="cn-text"><h3 class="display">SQD e qEOM</h3><p>SQD: o quântico sugere onde olhar e o clássico faz a conta. qEOM: mede quanto custa acender a molécula, de S0 a S1 e de S1 a T1.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEMA -->
+<section id="problema" class="section-light py-28 md:py-44">
+  <div class="wrap">
+    <p class="eyebrow mb-10 text-ink/60">01 · O problema</p>
+    <p class="reveal-words display text-[clamp(1.8rem,4.6vw,4.2rem)] !leading-[1.1]" data-reveal>
+      Um creme e uma luz vermelha já destroem tumores de pele no SUS, sem cortar nada. Faltam moléculas melhores, e o computador erra justamente nos casos difíceis. O laboratório só descobre isso depois de meses de síntese.
+    </p>
+    <ol class="thread" data-thread>
+      <span class="th-rail" aria-hidden="true"><i></i></span>
+      <li class="th-step">
+        <div class="th-text"><p class="eyebrow" style="color:var(--th-acc)">Hoje</p><h3 class="display">Terapia pronta, poucas moléculas</h3><p class="th-body">O protocolo do Ministério da Saúde cobre o carcinoma basocelular, e a rede de 72 centros existe. O tratamento depende de poucas moléculas.</p></div>
+        <span class="th-node" aria-hidden="true">1</span>
+        <figure class="th-fig"><img src="/src/assets/lumen_l1.webp" width="1400" height="1000" loading="lazy" decoding="async" alt="Esquema com quatro raios de luz de cores diferentes penetrando em camadas de pele; o vermelho chega mais fundo que o azul"><figcaption>Figura 1 · Esquema qualitativo: quanto maior o comprimento de onda, mais fundo a luz chega. Profundidades fora de escala.</figcaption></figure>
+      </li>
+      <li class="th-step">
+        <div class="th-text"><p class="eyebrow" style="color:var(--th-acc)">O gargalo</p><h3 class="display">Três requisitos ao mesmo tempo</h3><p class="th-body">Absorver luz vermelha, transferir energia ao oxigênio com eficiência e não ficar circulando no corpo. Prever isso exige calcular estados excitados.</p></div>
+        <span class="th-node" aria-hidden="true">2</span>
+        <figure class="th-fig"><img src="/src/assets/lumen_l2.webp" width="1400" height="1000" loading="lazy" decoding="async" alt="Diagrama de energia com absorção, cruzamento intersistemas até o tripleto T1 e transferência para o oxigênio singleto"><figcaption>Figura 2 · Diagrama de energia simplificado. O tripleto T1 precisa ficar acima do oxigênio singleto, em 0,98 eV.</figcaption></figure>
+      </li>
+      <li class="th-step">
+        <div class="th-text"><p class="eyebrow" style="color:var(--th-acc)">A consequência</p><h3 class="display">Descobrir só na bancada</h3><p class="th-body">Os melhores métodos clássicos falham em átomos pesados, metais e transferência de carga. A falha aparece depois de sintetizar.</p></div>
+        <span class="th-node" aria-hidden="true">3</span>
+        <figure class="th-fig"><img src="/src/assets/lumen_l3.webp" width="1400" height="1000" loading="lazy" decoding="async" alt="Estrutura do núcleo BODIPY ao lado de uma comparação do erro de excitação entre TD-DFT e duplos híbridos"><figcaption>Figura 3 · Núcleo BODIPY desenhado com RDKit e erro típico de absorção em eV. Ilustração original da equipe.</figcaption></figure>
+      </li>
+    </ol>
+    <div class="mt-16 md:mt-20">
+      <p class="eyebrow mb-4 text-ink/60">Em números</p>
+      <dl class="grid grid-cols-2 gap-px bg-ink/15 md:grid-cols-4">
+        <div class="bg-paper p-5"><dt class="eyebrow text-ink/55">Casos novos por ano</dt><dd class="display mt-3 text-4xl md:text-5xl"><span data-count="263" data-dec="0">263</span><span class="ml-1 font-sans text-lg font-medium tracking-normal text-ink/50">mil</span></dd><p class="mt-2 text-xs text-ink/55">câncer de pele não melanoma, INCA 2026–2028</p></div>
+        <div class="bg-paper p-5"><dt class="eyebrow text-ink/55">Centros de tratamento</dt><dd class="display mt-3 text-4xl md:text-5xl"><span data-count="72" data-dec="0">72</span></dd><p class="mt-2 text-xs text-ink/55">formados pelo programa TFD Brasil</p></div>
+        <div class="bg-paper p-5"><dt class="eyebrow text-ink/55">Erro do TD-DFT em BODIPY</dt><dd class="display mt-3 text-4xl md:text-5xl">0,2–0,5<span class="ml-1 font-sans text-lg font-medium tracking-normal text-ink/50">eV</span></dd><p class="mt-2 text-xs text-ink/55">média de 36 funcionais em 13 corantes</p></div>
+        <div class="bg-paper p-5"><dt class="eyebrow text-ink/55">Trecho no quântico</dt><dd class="display mt-3 text-4xl md:text-5xl">20–40<span class="ml-1 font-sans text-lg font-medium tracking-normal text-ink/50">qubits</span></dd><p class="mt-2 text-xs text-ink/55">só o cromóforo, 10 a 20 orbitais</p></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUTO / FUNIL -->
+<section id="produto" class="section-dark py-28 md:py-40">
+  <div class="wrap">
+    <div class="grid gap-10 md:grid-cols-[1fr_1.4fr] md:gap-20">
+      <div class="md:sticky md:top-28 md:self-start">
+        <p class="eyebrow mb-6 text-rose">02 · O produto</p>
+        <h2 class="display text-[clamp(2.2rem,5.2vw,4.6rem)]">A camada de <span class="serif text-amber">confiança</span>, não o solver.</h2>
+        <p class="mt-6 max-w-md text-paper/70">A Lumen roda sobre o fluxo que o laboratório já usa e responde: destas centenas de candidatas, estas poucas têm previsão clássica não confiável. Só elas justificam um cálculo caro.</p>
+        <div class="mt-8 h-1 w-full bg-line"><div id="funnel-bar" class="h-full origin-left scale-x-0 bg-rose"></div></div>
+      </div>
+      <ol class="flex flex-col" id="funnel">
+        <li class="funnel-step py-9" data-step>
+          <div class="flex items-baseline gap-5"><span class="mono text-sm text-rose">01</span><h3 class="display text-3xl md:text-4xl">Centenas de candidatas</h3></div>
+          <p class="mt-4 pl-10 text-paper/70 md:pl-12">O cliente envia as moléculas que quer avaliar como fotossensibilizadores.</p>
+        </li>
+        <li class="funnel-step py-9" data-step>
+          <div class="flex items-baseline gap-5"><span class="mono text-sm text-rose">02</span><h3 class="display text-3xl md:text-4xl">Triagem clássica com selo de confiança</h3></div>
+          <p class="mt-4 pl-10 text-paper/70 md:pl-12">Métodos clássicos preveem a janela de absorção, o cruzamento intersistemas e a energia do tripleto. Cada previsão ganha um selo: confiável ou em alerta.</p>
+        </li>
+        <li class="funnel-step py-9" data-step>
+          <div class="flex items-baseline gap-5"><span class="mono text-sm text-rose">03</span><h3 class="display text-3xl md:text-4xl">Núcleo quântico só nas em alerta</h3></div>
+          <p class="mt-4 pl-10 text-paper/70 md:pl-12">Espaço ativo de 10 a 20 orbitais, cerca de 20 a 40 qubits, com SQD e qEOM em Qiskit. Calcula as energias de S0, S1 e T1 do trecho que absorve a luz.</p>
+        </li>
+        <li class="funnel-step py-9" data-step>
+          <div class="flex items-baseline gap-5"><span class="mono text-sm text-rose">04</span><h3 class="display text-3xl md:text-4xl">Lista priorizada para a bancada</h3></div>
+          <p class="mt-4 pl-10 text-paper/70 md:pl-12">Moléculas ordenadas, com relatório de confiabilidade. O laboratório sintetiza só as que valem.</p>
+        </li>
+      </ol>
+    </div>
+    <div class="mt-24 md:mt-32">
+      <p class="eyebrow mb-6 text-mute">Quando a previsão clássica não é confiável</p>
+      <ol class="rows" style="--rw-acc:var(--color-amber)">
+  <li><p class="rw-k">0,3 eV</p><div><h3 class="display">Métodos discordam</h3><p>Três ou quatro funcionais, incluindo um duplo híbrido, dão resultados distantes.</p></div></li>
+  <li><p class="rw-k">Λ</p><div><h3 class="display">Transferência de carga</h3><p>O elétron muda de região da molécula, um ponto fraco conhecido do TD-DFT.</p></div></li>
+  <li><p class="rw-k">Z alto</p><div><h3 class="display">Átomos pesados ou metais</h3><p>O acoplamento spin-órbita é forte e os efeitos relativísticos pesam.</p></div></li>
+  <li><p class="rw-k">n frac.</p><div><h3 class="display">Orbitais fracionários</h3><p>A molécula não cabe em uma única configuração, o que indica caráter multirreferência.</p></div></li>
+</ol>
+      <p class="mt-4 text-sm text-mute">Os quatro sinais são hipóteses de trabalho. O limiar de 0,3 eV é inicial e será calibrado contra moléculas com medição conhecida.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SIMULADOR -->
+<section id="simulador" class="section-light py-28 md:py-40">
+  <div class="wrap">
+    <p class="eyebrow mb-6 text-ink/60">03 · Demo interativo</p>
+    <h2 class="display max-w-4xl text-[clamp(2.2rem,5.2vw,4.6rem)]">Singleto ou tripleto? Só a <span class="serif text-rose">fase</span> sabe.</h2>
+    <p class="mt-6 max-w-2xl text-ink/70">A terapia depende de a molécula passar do singleto para o tripleto, que dura mais e repassa energia ao oxigênio. Dois qubits representam dois elétrons. Troque a forma de medir e veja quando os estados se separam.</p>
+
+    <div class="mt-14 grid gap-6 lg:grid-cols-[1.3fr_1fr]">
+      <div class="border border-ink/15 bg-paper-2/50 p-5 md:p-8">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <span class="eyebrow text-ink/60">Forma de medir</span>
+          <div class="seg" role="group" aria-label="Forma de medir">
+            <button type="button" data-med="comum" aria-pressed="true">Medição comum</button>
+            <button type="button" data-med="girada" aria-pressed="false">Medição girada</button>
+          </div>
+        </div>
+        <div class="mt-8 grid gap-8 sm:grid-cols-2">
+          <div>
+            <h3 class="display text-3xl">Tripleto</h3><p class="mono mt-1 text-xs text-ink/55">spins paralelos · dura mais</p>
+            <div class="mt-5 flex flex-col gap-4">
+              <div data-row="tripleto-00" class="grid grid-cols-[2.5rem_1fr_3rem] items-center gap-3"><span class="mono text-sm">00</span><div class="bar"><i></i></div><span data-pct class="mono text-right text-sm">0%</span></div>
+              <div data-row="tripleto-01" class="grid grid-cols-[2.5rem_1fr_3rem] items-center gap-3"><span class="mono text-sm">01</span><div class="bar"><i></i></div><span data-pct class="mono text-right text-sm">0%</span></div>
+              <div data-row="tripleto-10" class="grid grid-cols-[2.5rem_1fr_3rem] items-center gap-3"><span class="mono text-sm">10</span><div class="bar"><i></i></div><span data-pct class="mono text-right text-sm">0%</span></div>
+              <div data-row="tripleto-11" class="grid grid-cols-[2.5rem_1fr_3rem] items-center gap-3"><span class="mono text-sm">11</span><div class="bar"><i></i></div><span data-pct class="mono text-right text-sm">0%</span></div>
+            </div>
+          </div>
+          <div>
+            <h3 class="display text-3xl">Singleto</h3><p class="mono mt-1 text-xs text-ink/55">spins opostos · dura pouco</p>
+            <div class="mt-5 flex flex-col gap-4">
+              <div data-row="singleto-00" class="grid grid-cols-[2.5rem_1fr_3rem] items-center gap-3"><span class="mono text-sm">00</span><div class="bar"><i></i></div><span data-pct class="mono text-right text-sm">0%</span></div>
+              <div data-row="singleto-01" class="grid grid-cols-[2.5rem_1fr_3rem] items-center gap-3"><span class="mono text-sm">01</span><div class="bar"><i></i></div><span data-pct class="mono text-right text-sm">0%</span></div>
+              <div data-row="singleto-10" class="grid grid-cols-[2.5rem_1fr_3rem] items-center gap-3"><span class="mono text-sm">10</span><div class="bar"><i></i></div><span data-pct class="mono text-right text-sm">0%</span></div>
+              <div data-row="singleto-11" class="grid grid-cols-[2.5rem_1fr_3rem] items-center gap-3"><span class="mono text-sm">11</span><div class="bar"><i></i></div><span data-pct class="mono text-right text-sm">0%</span></div>
+            </div>
+          </div>
+        </div>
+        <p class="mt-8 text-xs text-ink/55">0 é spin para cima e 1 é spin para baixo. Probabilidades ideais; no simulador, as medições variam um ou dois pontos.</p>
+      </div>
+      <div class="flex flex-col gap-px bg-ink/15">
+        <div id="v-box" class="bg-ink p-6 text-paper transition-colors duration-500"><p class="eyebrow opacity-60">Os dois estados são</p><p id="v-title" class="display mt-3 text-5xl">Idênticos</p><p id="v-sub" class="mt-3 text-sm opacity-80">Quem só olha qual elétron está para cima não separa os dois estados.</p></div>
+        <div class="bg-paper p-6"><p class="eyebrow text-ink/55">O que mudou no circuito</p><p id="v-code" class="mono mt-3 text-sm">medição comum</p></div>
+        <div class="bg-paper p-6"><p class="eyebrow text-ink/55">Única linha entre os estados</p><p class="mono mt-3 text-sm">qc.x(0)  # cria o sinal de menos</p></div>
+      </div>
+    </div>
+    <p class="mt-6 max-w-3xl text-sm text-ink/55">Transparência: é uma ilustração didática de por que a fase quântica importa. Ela não calcula uma molécula e não mostra vantagem quântica.</p>
+  </div>
+</section>
+
+<!-- DEMO CÓDIGO -->
+<section id="demo" class="section-dark py-28 md:py-40">
+  <div class="wrap">
+    <p class="eyebrow mb-6 text-rose">04 · Código rodando</p>
+    <h2 class="display max-w-4xl text-[clamp(2.2rem,5.2vw,4.6rem)]">Do circuito ao <span class="serif text-amber">primeiro gap</span>.</h2>
+    <div class="mt-14 grid gap-6 lg:grid-cols-2">
+      <div class="overflow-hidden border border-line bg-panel">
+        <div class="flex items-center gap-2 border-b border-line px-4 py-3"><span class="h-2.5 w-2.5 rounded-full bg-rose"></span><span class="h-2.5 w-2.5 rounded-full bg-amber"></span><span class="h-2.5 w-2.5 rounded-full bg-mute"></span><span class="mono ml-3 text-xs text-mute">demo_singleto_tripleto.py</span></div>
+        <pre class="mono overflow-x-auto p-5 text-[12.5px] leading-6 text-paper/85"><code>from qiskit import QuantumCircuit
+from qiskit_aer import AerSimulator
+
+sim = AerSimulator()
+
+def estado(singleto, girar_base):
+    # 2 qubits = 2 eletrons
+    # 0 = spin para cima, 1 = spin para baixo
+    qc = QuantumCircuit(2, 2)
+    if singleto:
+        qc.x(0)       # a UNICA linha que muda
+    qc.h(0)
+    qc.cx(0, 1)
+    qc.x(1)
+    if girar_base:    # revela a fase escondida
+        qc.h(0); qc.h(1)
+    qc.measure([0, 1], [0, 1])
+    return qc</code></pre>
+      </div>
+      <div class="overflow-hidden border border-line bg-panel" id="term">
+        <div class="flex items-center gap-2 border-b border-line px-4 py-3"><span class="mono text-xs text-mute">saída das duas demonstrações</span></div>
+        <pre class="mono min-h-[380px] overflow-x-auto p-5 text-[12.5px] leading-6" id="term-out" aria-live="off"></pre>
+      </div>
+    </div>
+    <p class="mt-6 max-w-3xl text-sm text-mute">A segunda demonstração é o primeiro cálculo molecular de verdade: o H₂ vai de PySCF para 4 qubits com Jordan-Wigner, e as energias batem com o FCI exato. É uma molécula mínima para provar o fluxo, não um fotossensibilizador.</p>
+  </div>
+</section>
+
+<!-- NEGÓCIO -->
+<section id="negocio" class="section-light py-28 md:py-40">
+  <div class="wrap">
+    <p class="eyebrow mb-6 text-ink/60">05 · Negócio</p>
+    <h2 class="display max-w-4xl text-[clamp(2.2rem,5.2vw,4.6rem)]">No começo, o dinheiro vem de <span class="serif text-rose">fomento</span>.</h2>
+    <ol class="rows" style="--rw-acc:var(--color-rose-d)">
+  <li><p class="rw-k">Fase 1</p><div><h3 class="display">Validação</h3><p>Editais de P&amp;D como PIPE/FAPESP e FINEP, sem diluir sócios.</p></div></li>
+  <li><p class="rw-k">Fase 2</p><div><h3 class="display">Serviço</h3><p>Triagem por projeto, com lista priorizada e relatório de confiabilidade.</p></div></li>
+  <li><p class="rw-k">Fase 3</p><div><h3 class="display">Plataforma</h3><p>Licença da camada de triagem, integrada ao fluxo computacional do cliente.</p></div></li>
+  <li><p class="rw-k">Quem paga</p><div><h3 class="display">Pesquisa e TFD</h3><p>Grupos que desenvolvem fotossensibilizadores e empresas de dispositivos e fármacos de TFD. A validar com parceiros.</p></div></li>
+</ol>
+    <div class="mt-10 flex flex-wrap items-center gap-3 text-sm text-ink/70"><span class="eyebrow text-ink/50">Mercados vizinhos</span>
+      <span class="border border-ink/20 px-3 py-1.5">corantes</span><span class="border border-ink/20 px-3 py-1.5">OLED</span><span class="border border-ink/20 px-3 py-1.5">células solares orgânicas</span><span class="border border-ink/20 px-3 py-1.5">fotocatálise</span></div>
+  </div>
+</section>
+
+<!-- PILOTO + HONESTIDADE -->
+<section id="piloto" class="section-dark py-28 md:py-40">
+  <div class="wrap grid gap-16 md:grid-cols-2">
+    <div>
+      <p class="eyebrow mb-6 text-rose">06 · Validação</p>
+      <h2 class="display text-[clamp(2rem,4.4vw,3.8rem)]">Primeiro, provar em moléculas <span class="serif text-amber">já medidas</span>.</h2>
+      <p class="mt-6 max-w-lg text-paper/70">Antes de vender qualquer coisa, a Lumen testa o fluxo em fotossensibilizadores caracterizados na literatura. O primeiro parceiro-alvo é o grupo de São Carlos, onde a terapia nasceu, ainda sem acordo formal.</p>
+      <ol class="mt-10 flex flex-col gap-px bg-line text-sm">
+        <li class="flex gap-4 bg-ink p-4"><span class="mono w-16 shrink-0 whitespace-nowrap text-rose">etapa 1</span><span class="text-paper/80">Reproduzir valores medidos do conjunto público SBYD31, com 31 BODIPY</span></li>
+        <li class="flex gap-4 bg-ink p-4"><span class="mono w-16 shrink-0 whitespace-nowrap text-rose">etapa 2</span><span class="text-paper/80">Comparar com TD-DFT padrão e um duplo híbrido e calibrar os sinais de confiança</span></li>
+        <li class="flex gap-4 bg-ink p-4"><span class="mono w-16 shrink-0 whitespace-nowrap text-rose">etapa 3</span><span class="text-paper/80">Teste cego com parceiro experimental: a previsão sai antes da medição</span></li>
+      </ol>
+      <p class="mt-6 max-w-lg text-sm text-mute">Se a Lumen não superar o melhor método clássico, o resultado negativo é publicado e o produto segue como triagem clássica.</p>
+    </div>
+    <div class="border border-line bg-panel p-8 md:p-10">
+      <p class="eyebrow mb-6 text-amber">O que não prometemos</p>
+      <ul class="flex flex-col gap-6 text-paper/80">
+        <li><span class="display text-2xl text-paper">Vantagem quântica.</span><br />Ela não está demonstrada neste problema, e a precisão química em um cromóforo realista ainda não foi mostrada em hardware.</li>
+        <li><span class="display text-2xl text-paper">Vencer a concorrência no solver.</span><br />A Algorithmiq, com Cleveland Clinic e IBM, levou o prêmio Q4Bio de US$ 2 milhões com um fluxo quântico-clássico para terapia fotodinâmica. A Lumen não compete aí: a camada de triagem pode usar o solver deles ou o nosso.</li>
+        <li><span class="display text-2xl text-paper">Superar o clássico de ponta.</span><br />Duplos híbridos já levam o erro de absorção dos BODIPY para perto de 0,1 eV. A Lumen atua onde ainda é difícil: tripleto, cruzamento intersistemas, átomos pesados e custo.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- EQUIPE -->
+<section id="equipe" class="section-light py-28 md:py-36">
+  <div class="wrap">
+    <p class="eyebrow mb-6 text-ink/60">07 · Equipe</p>
+    <h2 class="display max-w-4xl text-[clamp(2.2rem,5vw,4.2rem)]">Estudantes de Engenharia de Software na <span class="serif text-rose">FIAP</span>.</h2>
+    <ul class="team mt-14 grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-3 lg:grid-cols-5">
+      <li class="member"><div class="m-ph"><img src="/src/assets/team/luca.webp" width="480" height="600" loading="lazy" decoding="async" alt="Foto de Luca Baccari"><span class="m-i">01</span></div><h3 class="display mt-4 text-2xl">Luca Baccari</h3><p class="mt-1 text-sm text-ink/60">Ideia principal, pesquisa e código</p></li>
+      <li class="member"><div class="m-ph"><img src="/src/assets/team/renato.webp" width="480" height="600" loading="lazy" decoding="async" alt="Foto de Renato D'Agnolo"><span class="m-i">02</span></div><h3 class="display mt-4 text-2xl">Renato D'Agnolo</h3><p class="mt-1 text-sm text-ink/60">Pesquisa, ao lado do Luca</p></li>
+      <li class="member"><div class="m-ph"><img src="/src/assets/team/murilo.webp" width="480" height="600" loading="lazy" decoding="async" alt="Foto de Murilo Gomes"><span class="m-i">03</span></div><h3 class="display mt-4 text-2xl">Murilo Gomes</h3><p class="mt-1 text-sm text-ink/60">Landing page</p></li>
+      <li class="member"><div class="m-ph"><img src="/src/assets/team/vitor.webp" width="480" height="600" loading="lazy" decoding="async" alt="Foto de Vitor Buzato"><span class="m-i">04</span></div><h3 class="display mt-4 text-2xl">Vitor Buzato</h3><p class="mt-1 text-sm text-ink/60">Identidade visual da startup</p></li>
+      <li class="member"><div class="m-ph"><img src="/src/assets/team/henrique.webp" width="480" height="600" loading="lazy" decoding="async" alt="Foto de Henrique Bueno"><span class="m-i">05</span></div><h3 class="display mt-4 text-2xl">Henrique Bueno</h3><p class="mt-1 text-sm text-ink/60">Edição do vídeo do pitch</p></li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer class="section-dark relative overflow-hidden">
+  <div class="wrap py-24 md:py-32">
+    <p class="eyebrow text-rose">Contato</p>
+    <div class="mt-6 flex flex-wrap items-baseline gap-x-4 gap-y-2"><a href="mailto:lumen.org@gmail.com" class="display break-all text-[clamp(1.7rem,6.2vw,5.2rem)] transition-colors hover:text-rose" data-magnet>lumen.org@gmail.com</a><span class="mono text-xs text-mute">e-mail fictício</span></div>
+    <div class="mt-20 flex flex-col justify-between gap-8 border-t border-line pt-8 md:flex-row md:items-end">
+      <div class="h-8 text-paper"><svg viewBox="0 0 337.2 100" role="img" aria-label="Lumen" class="h-full w-auto"><g transform="translate(50 50)"><path fill-rule="evenodd" fill="#FF3D7F" d="M44 0A44 44 0 1 0 -44 0A44 44 0 1 0 44 0Z M35 -8A27 27 0 1 0 -19 -8A27 27 0 1 0 35 -8Z"/><circle cx="27.09" cy="-27.09" r="9" fill="#FFC83D"/></g><path d="M138.82846358823775 28.983725803911682 137.0514568744898 29.52115019443631Q136.0511785104871 29.94855545046925 135.62126042836906 30.600977148935193Q135.19134234625102 31.253398847401137 135.19134234625102 32.43241560158133V67.84659997546672Q135.19134234625102 69.53891663461923 135.9724617637545 70.29352069304883Q136.75358118125797 71.04812475147843 138.2759095940888 71.04812475147843H145.06337357398868Q146.75592589432 71.04812475147843 147.94636964832245 70.54871811780333Q149.13681340232492 70.04931148412822 150.03556320400537 68.86550351813435Q150.9343130056858 67.68169555214047 151.72729823955893 65.66209061524272L153.29788901630045 61.61786578789353Q153.88254365321995 60.19475622108578 154.77549958583714 59.733527365416286Q155.66845551845432 59.27229850974679 156.7813986816406 59.507284349590535Q157.9707516566515 59.776951755940914 158.47364881022276 60.7659615586251Q158.976545963794 61.75497136130929 158.579802141428 63.266747532308095L155.8136459481418 74.08569942370056Q155.30586980330943 76.06955323141813 154.48748810252545 76.98212378805874Q153.6691064017415 77.89469434469937 152.15133902418614 77.89469434469937Q151.1258705139458 77.89469434469937 150.254869596228 77.57102075852453Q149.3838686785102 77.24734717234969 148.40339688764513 76.92367358617484Q147.42292509678006 76.6 146.07323910957575 76.6H121.26554964780807Q119.80957277143001 76.6 119.03610956254602 75.90107310922443Q118.26264635366202 75.20214621844887 118.26264635366202 73.92061445400118Q118.26264635366202 71.89009346228838 120.23251349321008 71.0162741960883L122.02232347756625 70.47884980556368Q123.03696656149626 70.05056605744362 123.45970228365064 69.39218196971714Q123.88243800580501 68.73379788199067 123.88243800580501 67.56758439841866V32.43241560158133Q123.88243800580501 31.253398847401137 123.45970228365064 30.600977148935193Q123.03696656149626 29.94855545046925 122.02232347756625 29.52115019443631L120.23251349321008 28.983725803911682Q118.26264635366202 28.109906537711616 118.26264635366202 26.079385545998804Q118.26264635366202 24.78505051094293 119.03610956254602 24.092525255471465Q119.80957277143001 23.4 121.26554964780807 23.4H137.82103397485614Q139.31344940191508 23.4 140.06869333545865 24.092525255471465Q140.8239372690022 24.78505051094293 140.8239372690022 26.079385545998804Q140.8239372690022 28.08429999649524 138.82846358823775 28.983725803911682ZM183.83914338454605 71.73437842234969V69.70992339217662L183.55758973032235 69.47854411971568V52.907234776139255Q183.55758973032235 51.63389579126238 183.25168591083587 51.11185029390454Q182.94578209134937 50.58980479654669 182.24349359124898 50.32386563551425L180.84596595102548 50.174833313047884Q180.04742144331334 49.78886441481113 179.7073048312962 49.315242100358006Q179.36718821927906 48.84161978590488 179.36718821927906 48.11776841959357Q179.36718821927906 47.2966441040635 179.86800795848666 46.700552110999816Q180.3688276976943 46.10446011793613 181.6309801635146 45.615127694308754L187.34841730594633 43.43924000337719Q188.8706934725642 42.848906385213134 189.73153685854373 42.6328606916666Q190.59238024452327 42.41681499812007 191.3294061626196 42.41681499812007Q192.43860430890322 42.41681499812007 193.01797112800182 43.11045407107472Q193.59733794710039 43.80409314402937 193.59733794710039 44.94221626502275V68.66452661132811Q193.59733794710039 70.16287739345431 193.90786866086722 70.78321189008653Q194.21839937463403 71.40354638671874 194.85843047639727 71.68113896396756L195.83035659331082 72.01277563476562Q196.54166106283662 72.45374472919106 196.91025314091144 72.99602795410155Q197.27884521898625 73.53831117901206 197.27884521898625 74.37087285068631Q197.27884521898625 75.42298161533475 196.6370928146392 76.01149080766737Q195.99534041029216 76.6 194.85489527219534 76.6H188.72962770721315Q186.3427409491539 76.6 185.09094216684997 75.2724560830444Q183.83914338454605 73.94491216608881 183.83914338454605 71.73437842234969ZM162.42761754506824 66.8371057652235V52.907234776139255Q162.42761754506824 51.63389579126238 162.12171372558174 51.11185029390454Q161.81580990609527 50.58980479654669 161.11352140599487 50.32386563551425L159.71599376577137 50.174833313047884Q158.91744925805926 49.78886441481113 158.57733264604212 49.315242100358006Q158.23721603402495 48.84161978590488 158.23721603402495 48.11776841959357Q158.23721603402495 47.2966441040635 158.73803577323258 46.700552110999816Q159.2388555124402 46.10446011793613 160.5010079782605 45.615127694308754L166.21844512069225 43.43924000337719Q167.74072128731012 42.848906385213134 168.60156467328966 42.6328606916666Q169.4624080592692 42.41681499812007 170.1994339773655 42.41681499812007Q171.30863212364912 42.41681499812007 171.8879989427477 43.11045407107472Q172.4673657618463 43.80409314402937 172.4673657618463 44.94221626502275V64.28356738719344Q172.4673657618463 67.13922014510631 173.713918193236 68.63098517283797Q174.96047062462569 70.12275020056963 177.0179867161214 70.12275020056963Q178.50741144669055 70.12275020056963 180.08457897511124 69.3812762582004Q181.66174650353193 68.63980231583118 183.35077953225374 67.03732993426918L184.56221845790742 65.88264818897844L186.60675697979332 68.43837690517306L185.0797254768908 69.99967837965488Q181.15757067871093 74.05815606257319 177.864578580603 75.78535117669404Q174.57158648249506 77.51254629081487 171.48802364245057 77.51254629081487Q167.37843868151307 77.51254629081487 164.90302811329065 74.68950919452308Q162.42761754506824 71.86647209823131 162.42761754506824 66.8371057652235ZM211.9951169695258 44.94221626502275V68.66452661132811Q211.9951169695258 70.25331972393393 212.24918469676373 70.92086581856012Q212.5032524240017 71.5884119131863 213.2075730242133 71.92432133701443L214.22813561573622 72.30459448242186Q215.40756218174099 73.06650293406844 215.40756218174099 74.37087285068631Q215.40756218174099 76.6 213.20403782001137 76.6H200.70230024075508Q199.56429504406452 76.6 198.92132266901433 76.01193005371093Q198.27835029396414 75.42386010742187 198.27835029396414 74.37087285068631Q198.27835029396414 73.53831117901206 198.64738161808253 72.99602795410155Q199.0164129422009 72.45374472919106 199.7268389196396 72.01277563476562L200.7005220207274 71.68113896396756Q201.3805243836343 71.39074311611056 201.6710694668293 70.78321189008653Q201.96161455002425 70.1756806640625 201.96161455002425 68.66452661132811V52.907234776139255Q201.96161455002425 51.63389579126238 201.65571073053775 51.11185029390454Q201.34980691105127 50.58980479654669 200.64751841095088 50.32386563551425L199.24999077072738 50.174833313047884Q198.45144626301527 49.78886441481113 198.11132965099813 49.315242100358006Q197.77121303898096 48.84161978590488 197.77121303898096 48.11776841959357Q197.77121303898096 47.2966441040635 198.2720327781886 46.700552110999816Q198.77285251739622 46.10446011793613 200.0350049832165 45.615127694308754L205.74619632837175 43.43924000337719Q207.26847249498962 42.848906385213134 208.12931588096916 42.6328606916666Q208.9901592669487 42.41681499812007 209.727185185045 42.41681499812007Q210.83638333132862 42.41681499812007 211.41575015042721 43.11045407107472Q211.9951169695258 43.80409314402937 211.9951169695258 44.94221626502275ZM210.99048824194074 53.867971692830324 208.94594972005484 51.44878370454907 210.47298122295737 49.88748223006725Q214.46828626790642 45.73309751239418 217.7994149387181 43.98558555169403Q221.13054360952972 42.23807359099388 224.19222815367579 42.23807359099388Q228.37740330278874 42.23807359099388 230.8787913250625 45.04895156863331Q233.38017934733628 47.85982954627275 233.38017934733628 52.91351411658525V68.66452661132811Q233.38017934733628 70.25331972393393 233.6342470745742 70.92008509390055Q233.88831480181216 71.58685046386718 234.59263540202377 71.92432133701443L235.61319799354672 72.30459448242186Q236.79262455955148 73.06650293406844 236.79262455955148 74.37087285068631Q236.79262455955148 76.6 234.58910019782184 76.6H222.13599909317492Q219.9324747314453 76.6 219.9324747314453 74.37087285068631Q219.9324747314453 73.06650293406844 221.11190129745006 72.30459448242186L222.13422087314723 71.92432133701443Q222.83854147335887 71.5884119131863 223.09260920059683 70.92086581856012Q223.34667692783475 70.25331972393393 223.34667692783475 68.66452661132811V55.46705249461532Q223.34667692783475 52.61139973670244 222.08396398706734 51.11963470897078Q220.82125104629992 49.62786968123912 218.66538797864317 49.62786968123912Q217.16356978929042 49.62786968123912 215.52970493420958 50.369685102224345Q213.89584007912873 51.11150052320957 212.20192716759442 52.71641284617781ZM232.3442072752714 53.60048588353395 230.3224255413711 51.20405468323826 231.86518589556215 49.64890265336632Q235.77352048152684 45.64975875863432 238.7851924611926 43.9439161748141Q241.79686444085837 42.23807359099388 244.69343311423063 42.23807359099388Q248.77893285694716 42.23807359099388 250.80744834673402 44.71516998066008Q252.8359638365209 47.19226637032628 253.3670282590985 51.59880735966563L255.47590730482338 68.66452661132811Q255.65290849936008 70.15292387607693 255.86711210393904 70.76045510210096Q256.081315708518 71.367986328125 256.73699983412024 71.68113896396756L257.70892595103385 72.01277563476562Q258.39659514048697 72.47962441581487 258.7883832525909 73.00896779741346Q259.18017136469484 73.53831117901206 259.18017136469484 74.37087285068631Q259.18017136469484 75.42386010742187 258.53841896034777 76.01193005371093Q257.8966665560007 76.6 256.7562214179039 76.6H244.17772327086328Q241.97419890913366 76.6 241.97419890913366 74.37087285068631Q241.97419890913366 73.089259722054 243.17638226312397 72.30459448242186L244.19782334673403 71.92432133701443Q244.90214394694567 71.5884119131863 245.24471227145193 70.96637939453124Q245.58728059595822 70.34434687587618 245.41027940142155 68.89209449118376L243.59321920335293 55.47223944085836Q243.19372000989318 52.571951599061485 242.14089723858237 51.0999106401503Q241.08807446727155 49.62786968123912 238.9845386353135 49.62786968123912Q237.79478050017354 49.62786968123912 236.49029731094834 50.29091295954584Q235.18581412172315 50.953956237852566 233.57137505221365 52.45507648149132ZM291.0123721270263 55.03933608573675Q291.0123721270263 57.60872979304194 289.6543291234076 58.97623710855841Q288.2962861197889 60.343744424074885 285.77501915639635 60.343744424074885H266.04991091045736V56.50476425606011H278.5822324481606Q280.73958757248516 56.50476425606011 280.73958757248516 54.340698220402Q280.73958757248516 51.05551372420787 279.20031299929315 49.2377099173665Q277.6610384261012 47.419906110525126 275.2839786813855 47.419906110525126Q273.3459037519991 47.419906110525126 271.82089514604206 48.537527374297376Q270.29588654008506 49.655148638069626 269.4163175463825 51.80261883983016Q268.53674855267997 53.95008904159069 268.53674855267997 57.08393972343206Q268.53674855267997 63.4604943062663 271.43663336625696 66.73251300480962Q274.3365181798339 70.00453170335292 279.05245284605024 70.00453170335292Q281.9242123195827 70.00453170335292 284.173956401363 68.72360777932406Q286.4237004831433 67.44268385529517 287.7269776307046 65.55985050743817Q288.35946786069866 64.89181699043512 288.830210987702 64.63130132837594Q289.3009541147053 64.37078566631675 289.74422845464943 64.37390856495499Q290.3105778198838 64.37547001427411 290.6753920615464 64.8322203194499Q291.04020630320906 65.28897062462568 291.01459976199266 66.23514122658968Q290.86937132486696 69.10826732522249 289.03840385879573 71.65181641057133Q287.2074363927245 74.19536549592017 283.9501630533189 75.78436779128015Q280.6928897139132 77.37337008664011 276.27371015286445 77.37337008664011Q271.1231974096 77.37337008664011 267.3233540519774 75.20929138834774Q263.52351069435474 73.04521269005537 261.4475734515786 69.14785945563017Q259.37163620880244 65.25050622120499 259.37163620880244 60.107682612806556Q259.37163620880244 55.00188237655162 261.38595921993254 50.95576907351612Q263.40028223106265 46.909655770480626 267.2805653339028 44.57474317282438Q271.160848436743 42.23983057516813 276.6804262347221 42.23983057516813Q281.0441957877576 42.23983057516813 284.2603176858574 43.928000361889595Q287.4764395839572 45.61617014861106 289.2444058554918 48.52176570349931Q291.0123721270263 51.42736125838756 291.0123721270263 55.03933608573675ZM306.50736276680226 44.94221626502275V68.66452661132811Q306.50736276680226 70.25331972393393 306.7614304940402 70.92086581856012Q307.01549822127816 71.5884119131863 307.71981882148975 71.92432133701443L308.7403814130127 72.30459448242186Q309.91980797901743 73.06650293406844 309.91980797901743 74.37087285068631Q309.91980797901743 76.6 307.71628361728784 76.6H295.208300240755Q294.0702950440645 76.6 293.4273226690143 76.01193005371093Q292.7843502939641 75.42386010742187 292.7843502939641 74.37087285068631Q292.7843502939641 73.53831117901206 293.15338161808245 72.99602795410155Q293.52241294220084 72.45374472919106 294.23283891963956 72.01277563476562L295.20652202072733 71.68113896396756Q295.8865243836343 71.39074311611056 296.17706946682927 70.78321189008653Q296.4676145500242 70.1756806640625 296.4676145500242 68.66452661132811V52.907234776139255Q296.4676145500242 51.63389579126238 296.1617107305377 51.11185029390454Q295.8558069110512 50.58980479654669 295.1535184109509 50.32386563551425L293.75599077072735 50.174833313047884Q292.95744626301524 49.78886441481113 292.61732965099804 49.315242100358006Q292.2772130389809 48.84161978590488 292.2772130389809 48.11776841959357Q292.2772130389809 47.2966441040635 292.7780327781885 46.700552110999816Q293.27885251739616 46.10446011793613 294.5410049832165 45.615127694308754L300.25844212564823 43.43924000337719Q301.7807182922661 42.848906385213134 302.64156167824564 42.6328606916666Q303.5024050642252 42.41681499812007 304.23943098232144 42.41681499812007Q305.34862912860507 42.41681499812007 305.92799594770366 43.11045407107472Q306.50736276680226 43.80409314402937 306.50736276680226 44.94221626502275ZM305.4713906947374 53.72851858961582 303.4496089608371 51.33208738932013 304.99236931502816 49.77693535944819Q308.9649933994412 45.736258754253384 312.07231890211995 43.98716617262363Q315.1796444047987 42.23807359099388 318.20608037897944 42.23807359099388Q322.2268217555582 42.23807359099388 324.22594438821073 44.649728751003735Q326.22506702086326 47.0613839110136 326.71174897974726 51.271580592453475L328.855641793251 68.66452661132811Q329.0310815384686 70.15292387607693 329.2460658677071 70.76045510210096Q329.4610501969456 71.367986328125 330.11673432254787 71.68113896396756L331.0886604394614 72.01277563476562Q331.77632962891454 72.47962441581487 332.1681177410185 73.00896779741346Q332.5599058531224 73.53831117901206 332.5599058531224 74.37087285068631Q332.5599058531224 75.42386010742187 331.91815344877534 76.01193005371093Q331.2764010444283 76.6 330.1359559063315 76.6H317.5512119620144Q315.34768760028476 76.6 315.34768760028476 74.37087285068631Q315.34768760028476 73.02098935809731 316.5498709542751 72.30459448242186L317.57131203788515 71.92432133701443Q318.2756326380968 71.5884119131863 318.6174202379435 70.96637939453124Q318.9592078377902 70.34434687587618 318.78376809257264 68.89209449118376L316.9217406093478 54.985715157747265Q316.57345449832076 52.31873594012856 315.55314748278255 50.97330281068384Q314.53284046724434 49.62786968123912 312.494063001424 49.62786968123912Q311.1375892029702 49.62786968123912 309.72244361884884 50.317807804673905Q308.3072980347275 51.00774592810869 306.6729519304633 52.583109187573186Z" fill="currentColor"/></svg></div>
+      <p class="max-w-xl text-xs leading-relaxed text-mute">Projeto acadêmico criado para o Qiskit Fall Fest 2026, com a FIAP. A Lumen é uma ideia de startup em fase de conceito, sem vínculo com a IBM, com o programa TFD Brasil ou com o IFSC-USP. Não é orientação médica. Qiskit é marca da IBM.</p>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>
