@@ -99,6 +99,15 @@ const steps: Array<() => void> = [
       });
     });
   },
+  /* a navegação troca de tom conforme a seção que está por trás dela */
+  () => {
+    const nav = $<HTMLElement>("#nav"); if (!nav) return;
+    $$<HTMLElement>("main > section, footer").forEach((sec) => {
+      const dark = sec.classList.contains("section-dark") || sec.classList.contains("section-red");
+      ScrollTrigger.create({ trigger: sec, start: "top 32px", end: "bottom 32px",
+        onToggle: (s) => { if (s.isActive) nav.dataset.tone = dark ? "dark" : "light"; } });
+    });
+  },
   /* movimento de referência: saída do hero ligada à rolagem e entrada das seções */
   () => { if (!reduced) heroExit(orbital); },
   () => { if (!reduced) sectionMotion(); },

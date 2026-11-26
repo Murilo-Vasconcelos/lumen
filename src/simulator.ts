@@ -42,8 +42,8 @@ export function initSimulator() {
       pct.textContent = `${Math.round(p * 100)}%`;
     }));
     const iguais = KEYS.every((k) => PROB[m].tripleto[k] === PROB[m].singleto[k]);
-    verdict.style.background = iguais ? "#170a26" : "#ff3d7f";
-    verdict.style.color = iguais ? "#f5f2fa" : "#170a26";
+    verdict.style.background = iguais ? "#172B28" : "#C53737";
+    verdict.style.color = iguais ? "#F2F4EF" : "#ffffff";
     vTitle.textContent = iguais ? "Idênticos" : "Distintos";
     vSub.textContent = iguais
       ? "Quem só olha qual elétron está para cima não separa os dois estados."

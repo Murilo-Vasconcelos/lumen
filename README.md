@@ -20,3 +20,8 @@ npm run build    # gera dist/index.html, um arquivo único
 
 ## Para preencher
 Nomes e funções das 5 pessoas da equipe (procure por `[` em `index.html`).
+
+
+## Identidade visual
+
+Paleta: fundo `#F2F4EF`, texto `#172B28`, vermelho terapêutico `#C53737`, verde de seleção `#24705D`. Tipografia: IBM Plex Sans e IBM Plex Mono. Logos e assinatura (branco sobre vermelho) em `brand/`.

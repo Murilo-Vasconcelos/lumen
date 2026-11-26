@@ -18,10 +18,10 @@ const LINES = [
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const paint = (s: string) => {
-  if (s.startsWith("$")) return `<span style="color:#ffc83d">${esc(s)}</span>`;
-  if (s.startsWith("---")) return `<span style="color:#9a8db3">${esc(s)}</span>`;
-  if (/^TRIPLETO.*00=50%/.test(s)) return esc(s).replace(/(00=50% 11=50%)/, '<span style="color:#ff3d7f;font-weight:500">$1</span>');
-  if (s.startsWith("Qiskit")) return esc(s).replace(/(gap=[\d.]+ eV)/, '<span style="color:#ff3d7f;font-weight:500">$1</span>');
+  if (s.startsWith("$")) return `<span style="color:#7CC7AE">${esc(s)}</span>`;
+  if (s.startsWith("---")) return `<span style="color:#98ADA7">${esc(s)}</span>`;
+  if (/^TRIPLETO.*00=50%/.test(s)) return esc(s).replace(/(00=50% 11=50%)/, '<span style="color:#F0908C;font-weight:500">$1</span>');
+  if (s.startsWith("Qiskit")) return esc(s).replace(/(gap=[\d.]+ eV)/, '<span style="color:#F0908C;font-weight:500">$1</span>');
   return esc(s);
 };
 

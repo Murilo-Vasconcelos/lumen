@@ -1,7 +1,7 @@
 import gsap from "gsap";
 
 /* cor do destaque do site: o cursor muda para "accent" quando está sobre um fundo dessa cor */
-const ACCENT: [number, number, number] = [255, 61, 127];
+const ACCENT: [number, number, number] = [197, 55, 55];
 
 /* Cursor com a logo: segue o mouse, gira com o movimento e troca de cor conforme o fundo que está embaixo. */
 export function initCursor(reduced: boolean, onMove: (x: number, y: number) => void) {
